@@ -1,5 +1,5 @@
 # Smartclans
-![GitHub](https://img.shields.io/github/license/Goldmensch/smartclans?style=for-the-badge) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Goldmensch/smartclans?style=for-the-badge)   ![Download Info](https://img.shields.io/static/v1?label=Spigot&message=1.16.5&color=blue&style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/Goldmensch/smartclans?style=for-the-badge) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Goldmensch/smartclans?style=for-the-badge)   ![Spigotversion Info](https://img.shields.io/static/v1?label=Spigot&message=1.16.5&color=blue&style=for-the-badge) ![DevBuild Info](https://img.shields.io/static/v1?label=Beta-Version&message=3.0-Snapshot&color=orange&style=for-the-badge)
 > **A clan plugin for Spigot that tries to combine great functionality, great extensibility and easy configuration.**
 
 ## Info
