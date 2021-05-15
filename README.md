@@ -29,4 +29,4 @@ We use bStats to get anonymous plugin information, which we need to get an overv
 ![enter image description here](https://bstats.org/signatures/bukkit/smartclans.svg)
 
 ## License
-This project (and the wiki) are licensed under the MIT licence.
+This project (and the wiki) are licensed under the [MIT licence](https://github.com/Goldmensch/smartclans/blob/0.3/LICENSE).
