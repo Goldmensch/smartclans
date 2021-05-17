@@ -35,7 +35,7 @@ dependencies {
     testImplementation("junit:junit:4.13")
     testImplementation("net.pretronic.databasequery:pretronicdatabasequery-api:1.1.0.24")
     testImplementation("net.pretronic.databasequery:pretronicdatabasequery-sql:1.1.0.24")
-    testImplementation("com.h2database", "h2", "1.4.200")
+    testImplementation("com.h2database", "h2", "1.4.199")
     testImplementation("org.mariadb.jdbc", "mariadb-java-client", "3.0.0-alpha")
 
 }
@@ -51,7 +51,7 @@ sourceSets.main {
 
 /*---TasksConfiguration---*/
 tasks {
-    /***
+    /**
      * Java build settings:
      * - encoding = UTF8
      */
@@ -59,9 +59,10 @@ tasks {
         options.encoding = "UTF-8"
     }
 
-    /***
+    /**
      * ShadowJar settings:
      * - relocate bstats to de.goldmensch.bstats
+     * - minimize jar
      */
     shadowJar {
         minimize()
@@ -69,7 +70,7 @@ tasks {
     }
 
     /*--Tasks--*/
-    /***
+    /**
      * name: buildSpigot
      *
      * Downloads the spigot buildtools and
@@ -82,7 +83,7 @@ tasks {
         version = "1.16.5"
     }
 
-    /***
+    /**
      * name: copyToPlugins
      *
      * copy the built jar to the
@@ -90,7 +91,7 @@ tasks {
      */
     register<SmartClansUtils>("copyToPlugins")
 
-    /***
+    /**
      * name: buildAndCopy
      *
      * builds the project and copy the jar
@@ -101,7 +102,7 @@ tasks {
         dependsOn("buildProject", "copyToPlugins")
     }
 
-    /***
+    /**
      * name: test
      *
      * executes the JUnit test with a
@@ -112,7 +113,7 @@ tasks {
         maxHeapSize = "1G"
     }
 
-    /***
+    /**
      * name: buildProject
      *
      * builds the project
@@ -122,7 +123,7 @@ tasks {
         dependsOn("clean", "shadowJar")
     }
 
-    /***
+    /**
      * name: processResource
      *
      * replaced placeholders in plugin.yml
