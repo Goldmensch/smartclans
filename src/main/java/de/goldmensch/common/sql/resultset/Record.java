@@ -16,37 +16,25 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-package de.goldmensch.smartclans.util;
+package de.goldmensch.common.sql.resultset;
 
-import java.util.logging.Level;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class Logger {
+public class Record {
 
-    private static boolean debug = true;
-    private static java.util.logging.Logger logger;
+    private ResultSet resultSet;
 
-    public static void setup(java.util.logging.Logger logger) {
-        Logger.logger = logger;
-
+    protected Record(ResultSet resultSet) {
+        this.resultSet = resultSet;
     }
 
-    public static void setDebug(boolean enabled) {
-        Logger.debug = enabled;
-    }
-
-    public static void debug(String msg) {
-        if (debug && (logger != null)) {
-            logger.log(Level.WARNING, "[Debug] " + msg);
+    public <T> T getObject(String name, Class<T> clazz) {
+        try {
+            return resultSet.getObject(name, clazz);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
+        return null;
     }
-
-    public static void info(String msg) {
-        if (logger == null) return;
-        logger.log(Level.INFO, msg);
-    }
-
-    public static void log(Level level, String msg) {
-        logger.log(level, msg);
-    }
-
 }

@@ -3,7 +3,6 @@ author: goldmensch
 description: A clan plugin for spigot that tries to combine great functionality with easy configuration and extension
 version: ${version}
 website: https://github.com/Goldmensch/smartclans
-
 main: de.goldmensch.smartclans.Smartclans
 api-version: ${apiVersion}
 load: POSTWORLD

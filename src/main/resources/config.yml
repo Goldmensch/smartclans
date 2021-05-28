@@ -1,4 +1,11 @@
 debug:
   enabled: true
-metrics:
-  bStats: true
+
+storage:
+  driver: MySQL
+  database:
+    host: localhost
+    port: 3306
+    database: Smartclans
+    user: root
+    password: secret

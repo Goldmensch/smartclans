@@ -18,29 +18,42 @@
 
 package de.goldmensch.smartclans;
 
+import de.goldmensch.smartclans.config.Configuration;
+import de.goldmensch.smartclans.data.ServiceHolder;
+import de.goldmensch.smartclans.data.database.DatabaseLoader;
 import de.goldmensch.smartclans.metrics.MetricsCollector;
 import de.goldmensch.smartclans.util.Logger;
 import lombok.Getter;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.sql.DataSource;
 import java.util.logging.Level;
 
 public class Smartclans extends JavaPlugin {
-
-    private PluginConfiguration config;
+    private Configuration config;
+    private DataSource dataSource;
 
     @Getter
+    private ServiceHolder serviceHolder;
+    @Getter
+    private BukkitAudiences adventure;
+    @Getter
     private boolean developerVersion = false;
+    private boolean disabled = false;
 
     @Override
     public void onLoad() {
         Logger.setup(getLogger());
-        if(getDescription().getVersion().toLowerCase().contains("snapshot")) {
+        if (getDescription().getVersion().toLowerCase().contains("snapshot")) {
             developerVersion = true;
             Logger.log(Level.WARNING, "You use a developer Version of this plugin, this may contain bugs!");
         }
 
         initConfig();
+        if (disabled) return;
 
         Logger.setDebug(config.isDebugEnabled());
         Logger.debug("logger set up");
@@ -50,23 +63,63 @@ public class Smartclans extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        //hehe nothing here
+        if (disabled) {
+            getPluginLoader().disablePlugin(this);
+            return;
+        }
+        adventure = BukkitAudiences.create(this);
+        Logger.debug("adventure set up");
+
+        initDataBase();
+        initServices();
+    }
+
+    @Override
+    public void onDisable() {
+        disableAdventure();
     }
 
     private void initMetrics() {
         MetricsCollector metrics = new MetricsCollector(this);
-        if(config.isBStatsEnabled()) {
-            metrics.setupBStats(10354);
-        }else {
-            Logger.info("bStats disabled");
-        }
+        metrics.setupBStats(10354);
         Logger.debug("successfully init metrics");
     }
 
     private void initConfig() {
-        config = new PluginConfiguration(getConfig());
-        config.buildConfig(this);
-        config.load();
+        config = new Configuration(this);
+        config.buildConfig();
+        config.reload();
+        Logger.debug("config setup completed");
     }
+
+    private void disableAdventure() {
+        if (adventure != null) {
+            adventure.close();
+            adventure = null;
+        }
+    }
+
+    public Audience wrapSender(CommandSender sender) {
+        return adventure.sender(sender);
+    }
+
+    public void setDisabled() {
+        disabled = true;
+    }
+
+    public Configuration getPluginConfig() {
+        return config;
+    }
+
+    private void initDataBase() {
+        DatabaseLoader loader = new DatabaseLoader(this);
+        dataSource = loader.loadDatabase();
+        loader.setup();
+    }
+
+    private void initServices() {
+        serviceHolder = ServiceHolder.loadServices(config.getDatabaseDriver(), dataSource);
+    }
+
 
 }

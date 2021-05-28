@@ -8,7 +8,7 @@ plugins {
 
 /*---ProjectInfos---*/
 group = "de.goldmensch"
-version = "3.0-Snapshot"
+version = "3.0.1"
 
 /*---JavaPluginSettings--*/
 java {
@@ -21,7 +21,8 @@ java {
 repositories {
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots")
-    maven("https://repository.pretronic.net/repository/pretronic/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://mvnrepository.com/artifact/org.slf4j/slf4j-api")
 }
 
 /*---DependencyRegistration---*/
@@ -29,15 +30,16 @@ dependencies {
     /*--Project--*/
     compileOnly("org.jetbrains:annotations:20.1.0")
     compileOnly("org.spigotmc", "spigot-api", "1.16.5-R0.1-SNAPSHOT")
+    implementation("me.lucko", "adventure-platform-bukkit", "4.7.0")
     implementation("org.bstats", "bstats-bukkit", "2.2.1")
+    implementation("com.zaxxer", "HikariCP", "3.4.5")
+    implementation("org.slf4j", "slf4j-jdk14", "1.7.25")
+    // database driver
+    implementation("mysql", "mysql-connector-java", "8.0.25")
+    implementation("org.mariadb.jdbc", "mariadb-java-client", "2.7.2")
 
     /*--Test--*/
     testImplementation("junit:junit:4.13")
-    testImplementation("net.pretronic.databasequery:pretronicdatabasequery-api:1.1.0.24")
-    testImplementation("net.pretronic.databasequery:pretronicdatabasequery-sql:1.1.0.24")
-    testImplementation("com.h2database", "h2", "1.4.199")
-    testImplementation("org.mariadb.jdbc", "mariadb-java-client", "3.0.0-alpha")
-
 }
 
 /*---SourceSets---*/
@@ -62,11 +64,18 @@ tasks {
     /**
      * ShadowJar settings:
      * - relocate bstats to de.goldmensch.bstats
-     * - minimize jar
-     */
+     * */
     shadowJar {
-        minimize()
         relocate("org.bstats", "de.goldmensch.bstats")
+        relocate("net.kyori", "de.goldmensch.adventure")
+
+        relocate("org.slf4j", "de.goldmensch.slf4j")
+        relocate("com.zaxxer.hikari", "de.goldmensch.hikari")
+        relocate("com.mysql", "de.goldmensch.drivers.mysql")
+        relocate("com.google", "de.goldmensch.drivers.mysql")
+        relocate("org.mariadb.jdbc", "de.goldmensch.drivers.mariadb")
+
+        mergeServiceFiles()
     }
 
     /*--Tasks--*/

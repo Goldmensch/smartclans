@@ -33,9 +33,9 @@ public class MetricsCollector {
 
     public void setupBStats(int id) {
         Metrics metrics = new Metrics(smartclans, id);
-        if(smartclans.isDeveloperVersion()) {
+        if (smartclans.isDeveloperVersion()) {
             metrics.addCustomChart(new SimplePie("developer_version", () -> "yes"));
-        }else {
+        } else {
             metrics.addCustomChart(new SimplePie("developer_version", () -> "no"));
         }
         Logger.info("bStats Metrics were successfully activated.");

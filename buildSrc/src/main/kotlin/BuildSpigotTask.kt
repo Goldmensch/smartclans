@@ -9,8 +9,8 @@ open class BuildSpigotTask : DefaultTask() {
     lateinit var version: String
 
     @TaskAction
-    fun build(){
-        if(!buildToolsDir.exists() || !buildToolsFile.exists()) {
+    fun build() {
+        if (!buildToolsDir.exists() || !buildToolsFile.exists()) {
             buildToolsDir.mkdirs()
             buildToolsDir.resolve(buildToolsFile).writeBytes(buildToolsUrl.readBytes())
         }
@@ -30,17 +30,21 @@ open class BuildSpigotTask : DefaultTask() {
         println("build start scripts")
         File(buildToolsDir.path + File.separator + "start.bat").writeText(
             ":loop \n" +
-                javaCmd + "\n" +
-                "goto loop")
+                    javaCmd + "\n" +
+                    "goto loop"
+        )
 
         File(buildToolsDir.path + File.separator + "start.sh").writeText(
             "while true\n" +
-                 "do\n" +
-                 javaCmd + "\n" +
-                 "done")
+                    "do\n" +
+                    javaCmd + "\n" +
+                    "done"
+        )
 
         println("cleanup")
-        buildToolsDir.listFiles().filter{file -> file.isDirectory || (file.name.equals("BuildTools.jar")
-                || file.name.equals("BuildTools.log.txt")) }.forEach { file ->  file.deleteRecursively()}
+        buildToolsDir.listFiles().filter { file ->
+            file.isDirectory || (file.name.equals("BuildTools.jar")
+                    || file.name.equals("BuildTools.log.txt"))
+        }.forEach { file -> file.deleteRecursively() }
     }
 }
