@@ -38,79 +38,78 @@ public class DefaultSQLPlayerRepository implements PlayerRepository {
     @Override
     public Player create(Player player) {
         QueryBuilder.builder(source, null)
-                .setQuery("INSERT INTO players(uuid, name) VALUES(?, ?) ON DUPLICATE KEY UPDATE name = ?")
-                .setStatements(prep -> {
+                .query("INSERT INTO players(uuid, name) VALUES(?, ?) ON DUPLICATE KEY UPDATE name = ?")
+                .params(prep -> {
                     prep.setBytes(1, TypeConverter.convert(player.getUuid()));
                     prep.setString(2, player.getName());
                     prep.setString(3, player.getName());
                 })
                 .update()
-                .executeUpdate();
+                .execute();
         return player;
     }
 
     @Override
     public void update(Player player) {
         QueryBuilder.builder(source, null)
-                .setQuery("UPDATE players SET name = ?, clan_id = ?, rank_id = ? WHERE uuid = ?")
-                .setStatements(prep -> {
+                .query("UPDATE players SET name = ?, clan_id = ?, rank_id = ? WHERE uuid = ?")
+                .params(prep -> {
                     prep.setString(1, player.getName());
                     prep.setLong(2, player.getClanId());
                     prep.setInt(3, player.getRankID());
                     prep.setBytes(4, TypeConverter.convert(player.getUuid()));
                 })
                 .update()
-                .executeUpdate();
+                .execute();
     }
 
     @Override
     public void delete(Player player) {
         QueryBuilder.builder(source, null)
-                .setQuery("DELETE FROM players WHERE uuid = ?")
-                .setStatements(prep -> prep.setBytes(1, TypeConverter.convert(player.getUuid())))
+                .query("DELETE FROM players WHERE uuid = ?")
+                .params(prep -> prep.setBytes(1, TypeConverter.convert(player.getUuid())))
                 .update()
-                .executeUpdate();
+                .execute();
     }
 
     @Override
     public Optional<Player> read(UUID uuid) {
         return QueryBuilder.builder(source, Player.class)
-                .setQuery("SELECT * FROM players WHERE uuid = ?")
-                .setStatements(prep -> prep.setBytes(1, TypeConverter.convert(uuid)))
-                .extractResults(rs -> new Player(
+                .query("SELECT * FROM players WHERE uuid = ?")
+                .params(prep -> prep.setBytes(1, TypeConverter.convert(uuid)))
+                .readRow(rs -> new Player(
                         TypeConverter.convert(rs.getBytes("uuid")),
                         rs.getString("name"),
                         rs.getLong("clan_id"),
                         rs.getInt("rank_id")
                 ))
-                .retrieveResult();
+                .first();
     }
 
     @Override
     public List<Player> getALl(Clan clan) {
         return QueryBuilder.builder(source, Player.class)
-                .setQuery("SELECT * FROM players")
-                .emptyStatements()
-                .extractResults(rs -> new Player(
+                .queryWithoutParams("SELECT * FROM players")
+                .readRow(rs -> new Player(
                         TypeConverter.convert(rs.getBytes("uuid")),
                         rs.getString("name"),
                         rs.getLong("clan_id"),
                         rs.getInt("rank_id")
                 ))
-                .retrieveResults();
+                .all();
     }
 
     @Override
     public Optional<Player> read(String name) {
         return QueryBuilder.builder(source, Player.class)
-                .setQuery("SELECT * FROM players WHERE name = ?")
-                .setStatements(prep -> prep.setString(1, name))
-                .extractResults(rs -> new Player(
+                .query("SELECT * FROM players WHERE name = ?")
+                .params(prep -> prep.setString(1, name))
+                .readRow(rs -> new Player(
                         TypeConverter.convert(rs.getBytes("uuid")),
                         rs.getString("name"),
                         rs.getLong("clan_id"),
                         rs.getInt("rank_id")
                 ))
-                .retrieveResult();
+                .first();
     }
 }

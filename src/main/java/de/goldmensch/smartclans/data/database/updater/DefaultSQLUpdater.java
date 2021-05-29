@@ -114,10 +114,9 @@ public class DefaultSQLUpdater implements Updater {
         }
 
         Arrays.stream(patch.split(";")).filter(s -> !s.isEmpty()).forEach(query -> QueryBuilder.builder(source, null)
-                .setQuery(query)
-                .emptyStatements()
+                .queryWithoutParams(query)
                 .update()
-                .executeUpdate());
+                .execute());
         Logger.debug("patch applied: " + path);
     }
 }

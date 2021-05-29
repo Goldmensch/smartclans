@@ -35,56 +35,53 @@ public class DefaultSQLClanRepository implements ClanRepository {
 
     @Override
     public Clan create(Clan clan) {
-        QueryBuilder.builder(dataSource, null)
-                .setQuery("INSERT IGNORE INTO clans(name) VALUES(?)")
-                .setStatements(prep -> prep.setString(1, clan.getName()))
-                .update()
-                .executeUpdate();
-
         clan.setId(QueryBuilder.builder(dataSource, Long.class)
-                .setQuery("SELECT id FROM clans WHERE name = ?")
-                .setStatements(prep -> prep.setString(1, clan.getName()))
-                .extractResults(rs -> rs.getLong("id"))
-                .retrieveResult().orElseThrow(EmptyOptionalException::new));
+                .query("INSERT IGNORE INTO clans(name) VALUES(?)")
+                .params(prep -> prep.setString(1, clan.getName()))
+                .append()
+                .query("SELECT id FROM clans WHERE name = ?")
+                .params(prep -> prep.setString(1, clan.getName()))
+                .readRow(rs -> rs.getLong("id"))
+                .first().orElseThrow(EmptyOptionalException::new));
         return clan;
     }
 
     @Override
     public void update(Clan clan) {
         QueryBuilder.builder(dataSource, null)
-                .setQuery("UPDATE clans SET name = ? WHERE id = ?")
-                .setStatements(prep -> {
+                .query("UPDATE clans SET name = ? WHERE id = ?")
+                .params(prep -> {
                     prep.setString(1, clan.getName());
                     prep.setLong(2, clan.getId());
                 })
                 .update()
-                .executeUpdate();
+                .execute();
     }
 
     @Override
     public void delete(Clan clan) {
         QueryBuilder.builder(dataSource, null)
-                .setQuery("DELETE FROM clans WHERE id = ?")
-                .setStatements(prep -> prep.setLong(1, clan.getId()))
+                .query("DELETE FROM clans WHERE id = ?")
+                .params(prep -> prep.setLong(1, clan.getId()))
                 .update()
-                .executeUpdate();
+                .execute();
     }
 
     @Override
     public Optional<Clan> read(Long id) {
         return QueryBuilder.builder(dataSource, Clan.class)
-                .setQuery("SELECT name FROM clans WHERE id = ?")
-                .setStatements(prep -> prep.setLong(1, id))
-                .extractResults(rs -> new Clan(id, rs.getString("name")))
-                .retrieveResult();
+                .query("SELECT name FROM clans WHERE id = ?")
+                .params(prep -> prep.setLong(1, id))
+                .readRow(rs -> new Clan(id, rs.getString("name")))
+                .first();
     }
 
     @Override
     public Optional<Clan> read(String name) {
         return QueryBuilder.builder(dataSource, Clan.class)
-                .setQuery("SELECT id FROM clans WHERE name = ?")
-                .setStatements(prep -> prep.setString(1, name))
-                .extractResults(rs -> new Clan(rs.getLong("id"), name))
-                .retrieveResult();
+                .query("SELECT id FROM clans WHERE name = ?")
+                .params(prep -> prep.setString(1, name))
+                .readRow(rs -> new Clan(rs.getLong("id"), name))
+                .first();
     }
 }

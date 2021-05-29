@@ -17,19 +17,17 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-package de.goldmensch.smartclans.data.repositories.player;
+package de.goldmensch.smartclans.data.services;
 
-import de.goldmensch.smartclans.data.repositories.player.elements.Player;
-import org.bukkit.OfflinePlayer;
+import de.goldmensch.smartclans.data.repositories.clan.elements.Clan;
 
-import java.util.UUID;
+public interface IClanService {
 
-public interface IPlayerService {
-    Player getPlayer(UUID uuid);
+    Clan createClan(String name);
 
-    Player getPlayer(String name);
+    Clan getClan(String name);
+
+    void deleteClan(Clan clan);
 
     boolean exist(String name);
-
-    Player createPlayer(OfflinePlayer player);
 }

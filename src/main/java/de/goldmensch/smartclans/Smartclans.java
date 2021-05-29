@@ -26,10 +26,12 @@ import de.goldmensch.smartclans.util.Logger;
 import lombok.Getter;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.sql.DataSource;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class Smartclans extends JavaPlugin {
@@ -72,6 +74,24 @@ public class Smartclans extends JavaPlugin {
 
         initDataBase();
         initServices();
+
+        if(!serviceHolder.getClanService().exist("test")) {
+            serviceHolder.getClanService().createClan("test");
+            Logger.info("clan test created");
+        }else {
+            Logger.info("clan test exist");
+        }
+
+        Logger.info(String.valueOf(serviceHolder.getClanService().getClan("test").getId()));
+
+        if(!serviceHolder.getPlayerService().exist("goldmensch")) {
+            serviceHolder.getPlayerService().createPlayer(Bukkit.getOfflinePlayer(UUID.fromString("3876fc3f-ab8f-4789-a105-e68bafa11f4d")));
+            Logger.info("player goldmensch created");
+        }else {
+            Logger.info("player goldmensch exist");
+        }
+
+        Logger.info(serviceHolder.getPlayerService().getPlayer("goldmensch").getUuid().toString());
     }
 
     @Override

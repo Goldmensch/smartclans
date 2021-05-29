@@ -1,4 +1,4 @@
-/*---Plugins---*/
+
 plugins {
     java
     // only essential lombok features like, getter and setter
@@ -6,18 +6,14 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
-/*---ProjectInfos---*/
 group = "de.goldmensch"
 version = "3.0.1"
 
-/*---JavaPluginSettings--*/
 java {
-    // set sourceCompatibility to 1.8
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-/*---RepositoryRegistration---*/
 repositories {
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots")
@@ -25,7 +21,6 @@ repositories {
     maven("https://mvnrepository.com/artifact/org.slf4j/slf4j-api")
 }
 
-/*---DependencyRegistration---*/
 dependencies {
     /*--Project--*/
     compileOnly("org.jetbrains:annotations:20.1.0")
@@ -34,6 +29,7 @@ dependencies {
     implementation("org.bstats", "bstats-bukkit", "2.2.1")
     implementation("com.zaxxer", "HikariCP", "3.4.5")
     implementation("org.slf4j", "slf4j-jdk14", "1.7.25")
+    implementation("cloud.commandframework", "cloud-core", "1.4.0")
     // database driver
     implementation("mysql", "mysql-connector-java", "8.0.25")
     implementation("org.mariadb.jdbc", "mariadb-java-client", "2.7.2")
@@ -42,16 +38,6 @@ dependencies {
     testImplementation("junit:junit:4.13")
 }
 
-/*---SourceSets---*/
-sourceSets.main {
-    // defines the source set
-    java.srcDir("java")
-
-    // defines the resource set
-    resources.srcDir("resources")
-}
-
-/*---TasksConfiguration---*/
 tasks {
     /**
      * Java build settings:
@@ -63,7 +49,7 @@ tasks {
 
     /**
      * ShadowJar settings:
-     * - relocate bstats to de.goldmensch.bstats
+     * -
      * */
     shadowJar {
         relocate("org.bstats", "de.goldmensch.bstats")
@@ -74,8 +60,15 @@ tasks {
         relocate("com.mysql", "de.goldmensch.drivers.mysql")
         relocate("com.google", "de.goldmensch.drivers.mysql")
         relocate("org.mariadb.jdbc", "de.goldmensch.drivers.mariadb")
+        relocate("cloud.commandframework", "de.goldmensch.cloud.framework")
+        relocate("io.leangen.geantyref", "de.goldmensch.cloud.geantyref")
 
         mergeServiceFiles()
+
+        minimize {
+            exclude(dependency("mysql:mysql-connector-java:8.0.25"))
+            exclude(dependency("org.mariafb.jdbc:mariadb-java-client:2.7.2"))
+        }
     }
 
     /*--Tasks--*/

@@ -19,7 +19,7 @@
 
 package de.goldmensch.smartclans.data;
 
-import de.goldmensch.smartclans.data.repositories.player.IPlayerService;
+import de.goldmensch.smartclans.data.services.IPlayerService;
 import de.goldmensch.smartclans.data.repositories.player.PlayerRepository;
 import de.goldmensch.smartclans.data.repositories.player.elements.Player;
 import lombok.AllArgsConstructor;
