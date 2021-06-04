@@ -1,10 +1,10 @@
-create table if not exists clans
+CREATE TABLE IF NOT EXISTS clans
 (
     id   bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
     name varchar(64)        NOT NULL UNIQUE
 );
 
-create table if not exists ranks
+CREATE TABLE IF NOT EXISTS rank
 (
     id     int PRIMARY KEY NOT NULL,
     name   varchar(32)     NOT NULL UNIQUE,
@@ -18,7 +18,7 @@ VALUES (2, 'Co-Leader', 2);
 INSERT INTO ranks(id, name, weight)
 VALUES (3, 'Member', 3);
 
-create table if not exists players
+CREATE TABLE IF NOT EXISTS players
 (
     uuid    binary(16) PRIMARY KEY NOT NULL,
     name    varchar(16)            NOT NULL,
@@ -27,7 +27,7 @@ create table if not exists players
     FOREIGN KEY (rank_id) REFERENCES ranks (id)
 );
 
-create table if not exists smartclans_db_version
+CREATE TABLE IF NOT EXISTS smartclans_db_version
 (
     version int PRIMARY KEY
 );
