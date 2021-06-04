@@ -20,8 +20,8 @@ package de.goldmensch.smartclans.data;
 
 import de.goldmensch.smartclans.config.DatabaseDriver;
 import de.goldmensch.smartclans.data.repositories.clan.ClanRepository;
-import de.goldmensch.smartclans.data.repositories.clan.DefaultSQLClanRepository;
-import de.goldmensch.smartclans.data.repositories.player.DefaultSQLPlayerRepository;
+import de.goldmensch.smartclans.data.repositories.clan.MySQLClanRepository;
+import de.goldmensch.smartclans.data.repositories.player.MySQLPlayerRepository;
 import de.goldmensch.smartclans.data.repositories.player.PlayerRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -42,8 +42,8 @@ public class ServiceHolder {
         switch (driver) {
             case MARIA_DB:
             case MYSQL:
-                playerRepository = new DefaultSQLPlayerRepository(dataSource);
-                clanRepository = new DefaultSQLClanRepository(dataSource);
+                playerRepository = new MySQLPlayerRepository(dataSource);
+                clanRepository = new MySQLClanRepository(dataSource);
         }
         return new ServiceHolder(new ClanService(clanRepository), new PlayerService(playerRepository));
     }

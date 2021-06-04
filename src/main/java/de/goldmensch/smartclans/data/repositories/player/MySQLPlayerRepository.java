@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class DefaultSQLPlayerRepository implements PlayerRepository {
+public class MySQLPlayerRepository implements PlayerRepository {
 
     private final DataSource source;
 

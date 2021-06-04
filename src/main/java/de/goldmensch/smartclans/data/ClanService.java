@@ -19,8 +19,8 @@
 package de.goldmensch.smartclans.data;
 
 import de.goldmensch.smartclans.data.repositories.clan.ClanRepository;
-import de.goldmensch.smartclans.data.services.IClanService;
 import de.goldmensch.smartclans.data.repositories.clan.elements.Clan;
+import de.goldmensch.smartclans.data.services.IClanService;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;

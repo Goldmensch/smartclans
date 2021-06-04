@@ -22,8 +22,11 @@ package de.goldmensch.common.file.fileversion;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -33,6 +36,7 @@ public class FileVersionSorter {
     private final Map<Integer, Path> orderedFiles = new TreeMap<>();
     private List<Path> paths;
 
+    @SuppressWarnings("unused")
     public FileVersionSorter(String key, Path path) {
         this.key = key;
         this.dir = path;
@@ -48,7 +52,7 @@ public class FileVersionSorter {
     public Map<Integer, Path> sort() {
         if (dir != null) {
             paths = Arrays.stream(
-                    Objects.requireNonNull(dir.toFile().listFiles()))
+                    dir.toFile().listFiles())
                     .map(File::toPath)
                     .collect(Collectors.toList());
         }
@@ -57,17 +61,12 @@ public class FileVersionSorter {
     }
 
     private void sortPaths() {
-        paths.forEach(path -> {
-            AtomicReference<String> version = new AtomicReference<>("");
-            path.getFileName().toString().
-                    split(key)[1].chars().
-                    mapToObj(c -> (char) c).
-                    filter(character -> Pattern.compile("[0-9]")
-                            .matcher(String.valueOf(character))
-                            .matches()).forEach(
-                    character -> version.set(version + String.valueOf(character)));
-
-            orderedFiles.put(Integer.valueOf(version.get()), path);
-        });
+        Pattern pattern = Pattern.compile(key + "([0-9]+)");
+        for(Path path : paths) {
+            Matcher matcher = pattern.matcher(path.getFileName().toString());
+            if(matcher.find()) {
+                orderedFiles.put(Integer.valueOf(matcher.group(1)), path);
+            }
+        }
     }
 }

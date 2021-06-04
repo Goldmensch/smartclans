@@ -6,3 +6,10 @@ website: https://github.com/Goldmensch/smartclans
 main: de.goldmensch.smartclans.Smartclans
 api-version: ${apiVersion}
 load: POSTWORLD
+
+commands:
+  smartclans:
+    description: Main Smartclans command
+    aliases:
+      - clans
+      - clan

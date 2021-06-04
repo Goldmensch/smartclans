@@ -19,6 +19,7 @@ repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://mvnrepository.com/artifact/org.slf4j/slf4j-api")
+    maven("https://eldonexus.de/repository/maven-public")
 }
 
 dependencies {
@@ -29,9 +30,9 @@ dependencies {
     implementation("org.bstats", "bstats-bukkit", "2.2.1")
     implementation("com.zaxxer", "HikariCP", "3.4.5")
     implementation("org.slf4j", "slf4j-jdk14", "1.7.25")
-    implementation("cloud.commandframework", "cloud-core", "1.4.0")
+    implementation("de.eldoria", "eldo-util", "1.9.0")
     // database driver
-    implementation("mysql", "mysql-connector-java", "8.0.25")
+    //implementation("mysql", "mysql-connector-java", "8.0.25")
     implementation("org.mariadb.jdbc", "mariadb-java-client", "2.7.2")
 
     /*--Test--*/
@@ -57,17 +58,15 @@ tasks {
 
         relocate("org.slf4j", "de.goldmensch.slf4j")
         relocate("com.zaxxer.hikari", "de.goldmensch.hikari")
-        relocate("com.mysql", "de.goldmensch.drivers.mysql")
-        relocate("com.google", "de.goldmensch.drivers.mysql")
+        //relocate("com.mysql", "de.goldmensch.drivers.mysql")
+        //relocate("com.google.protobuf", "de.goldmensch.drivers.mysql")
         relocate("org.mariadb.jdbc", "de.goldmensch.drivers.mariadb")
-        relocate("cloud.commandframework", "de.goldmensch.cloud.framework")
-        relocate("io.leangen.geantyref", "de.goldmensch.cloud.geantyref")
 
         mergeServiceFiles()
 
         minimize {
-            exclude(dependency("mysql:mysql-connector-java:8.0.25"))
-            exclude(dependency("org.mariafb.jdbc:mariadb-java-client:2.7.2"))
+            //exclude(dependency("mysql:mysql-connector-java:8.0.25"))
+            exclude(dependency("org.mariadb.jdbc:mariadb-java-client:2.7.2"))
         }
     }
 

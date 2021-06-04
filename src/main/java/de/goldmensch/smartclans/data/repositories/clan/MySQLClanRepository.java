@@ -25,11 +25,11 @@ import de.goldmensch.smartclans.data.repositories.clan.elements.Clan;
 import javax.sql.DataSource;
 import java.util.Optional;
 
-public class DefaultSQLClanRepository implements ClanRepository {
+public class MySQLClanRepository implements ClanRepository {
 
     DataSource dataSource;
 
-    public DefaultSQLClanRepository(DataSource dataSource) {
+    public MySQLClanRepository(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

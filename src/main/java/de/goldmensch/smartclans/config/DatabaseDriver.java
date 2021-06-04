@@ -18,7 +18,6 @@
 
 package de.goldmensch.smartclans.config;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
 import lombok.Getter;
 import org.mariadb.jdbc.MariaDbDataSource;
 
@@ -26,7 +25,7 @@ import javax.sql.DataSource;
 
 public enum DatabaseDriver {
     MARIA_DB("MariaDB", MariaDbDataSource.class),
-    MYSQL("Mysql", MysqlDataSource.class);
+    MYSQL("Mysql", DatabaseDriver.MARIA_DB.getDataSourceClass());
 
     @Getter
     private final String name;

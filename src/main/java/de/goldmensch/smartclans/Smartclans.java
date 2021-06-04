@@ -18,6 +18,8 @@
 
 package de.goldmensch.smartclans;
 
+import de.eldoria.eldoutilities.plugin.EldoPlugin;
+import de.goldmensch.smartclans.commands.clancommand.ClanCommand;
 import de.goldmensch.smartclans.config.Configuration;
 import de.goldmensch.smartclans.data.ServiceHolder;
 import de.goldmensch.smartclans.data.database.DatabaseLoader;
@@ -26,15 +28,16 @@ import de.goldmensch.smartclans.util.Logger;
 import lombok.Getter;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import org.bukkit.Bukkit;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.sql.DataSource;
-import java.util.UUID;
 import java.util.logging.Level;
 
-public class Smartclans extends JavaPlugin {
+public class Smartclans extends EldoPlugin {
+    public static final Component PREFIX = Component.text("[Clans] ").color(NamedTextColor.GOLD);
+
     private Configuration config;
     private DataSource dataSource;
 
@@ -64,7 +67,7 @@ public class Smartclans extends JavaPlugin {
     }
 
     @Override
-    public void onEnable() {
+    public void onPluginEnable() {
         if (disabled) {
             getPluginLoader().disablePlugin(this);
             return;
@@ -75,27 +78,11 @@ public class Smartclans extends JavaPlugin {
         initDataBase();
         initServices();
 
-        if(!serviceHolder.getClanService().exist("test")) {
-            serviceHolder.getClanService().createClan("test");
-            Logger.info("clan test created");
-        }else {
-            Logger.info("clan test exist");
-        }
-
-        Logger.info(String.valueOf(serviceHolder.getClanService().getClan("test").getId()));
-
-        if(!serviceHolder.getPlayerService().exist("goldmensch")) {
-            serviceHolder.getPlayerService().createPlayer(Bukkit.getOfflinePlayer(UUID.fromString("3876fc3f-ab8f-4789-a105-e68bafa11f4d")));
-            Logger.info("player goldmensch created");
-        }else {
-            Logger.info("player goldmensch exist");
-        }
-
-        Logger.info(serviceHolder.getPlayerService().getPlayer("goldmensch").getUuid().toString());
+        registerCommand("smartclans", new ClanCommand(this));
     }
 
     @Override
-    public void onDisable() {
+    public void onPluginDisable() {
         disableAdventure();
     }
 
